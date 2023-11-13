@@ -1,0 +1,83 @@
+{% extends "./base.html"%}
+
+{% load static %}
+
+{% block body%}
+
+<!--Agregar un producto-->
+    <h1>Agregar producto</h1>
+
+    <div class="container">
+        <form id="formAgregar" action="agregarServicioForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="txtIdServicio">Id del servicio:</label>
+                    <input name="txtIdServicio" id="txtIdServicio" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-8">
+                    <label for="txtnombre">Nombre servicio:</label>
+                    <input name="txtnombre" id="txtnombre" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="txtprecio">Precio del servicio:</label>
+                    <input name="txtprecio" id="txtprecio" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-8">
+                    <label for="cmbEncargado">Encargado del servicio:</label>
+                    <select id="cmbEncargado" name="cmbEncargado" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for emp in empleados %}
+                        <option value="{{emp.rut}}">{{emp.rut}} - {{emp.nombre}}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                <div class="col-md-12">
+                    <label for="txtDescripcion">Descripcion:</label>
+                    <input name="txtDescripcion" id="txtDescripcion" type="text" class="form-control">
+                </div>
+
+
+            </div>
+            <button class="btn btn-success mt-5 w-100">Agregar servicio</button>
+        </form>
+    </div>
+
+
+
+<!--Lista de productos para eliminar y editar-->
+<div class="container mt-5">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID Servicio</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Encargado</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for s in servicios %}
+          <tr>
+            <th scope="row">{{s.id_servicio}}</th>
+            <td>{{s.nombre_servicio}}</td>
+            <td>{{s.precio}}</td>
+            <td>{{s.descripcion}}</td>
+            <td>{{s.encargado.rut}} - {{s.encargado.nombre}}</td>
+            <td><a href="editarProducto/{{p.id_producto}}" class="btn btn-primary">Editar</a></td>
+            <td><a href="eliminarProducto/{{p.id_producto}}" class="btn btn-danger">Eliminar</a></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+
+
+
+{% endblock %}
