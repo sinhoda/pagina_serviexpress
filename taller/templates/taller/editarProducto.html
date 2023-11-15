@@ -4,10 +4,11 @@
 
 {% block body %}
 
-    <h1>Editar producto</h1>
+   
 
     <div class="container">
-        <form action="/tienda/editarProducto" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <h1>Editar producto</h1>
+        <form action="/taller/crud/editarProducto" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
                     <label for="txtSku">Id de producto:</label>
@@ -50,7 +51,8 @@
                 <div class="col-md-12">
                     <label for="txtImagen">Imagen:</label>
                     <img src="{{producto.imagenUrl.url}}" height="100" alt="">
-                    <input name="txtImagen" id="txtImagen" type="file" class="form-control">
+
+                    <input name="txtImagen" id="txtImagen" type="file" class="form-control" value="null">
                 </div>
             </div>
             <button class="btn btn-success mt-5 w-100">Editar producto</button>

@@ -72,7 +72,7 @@ class Empleado(models.Model):
 
 
 class Servicio(models.Model):
-    id_servicio= models.IntegerField(default=0)
+    id_servicio= models.IntegerField(default=0, primary_key=True)
     nombre_servicio= models.CharField(max_length=200)
     descripcion= models.CharField(max_length=200)
     encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE)

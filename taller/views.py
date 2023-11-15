@@ -105,19 +105,20 @@ def editarProducto(request):
         v_imagen = request.FILES['txtImagen']
         ruta_imagen = os.path.join(settings.MEDIA_ROOT, str(productoBD.imagenUrl))
         os.remove(ruta_imagen)
+        productoBD.imagenUrl = v_imagen
     except:
-        v_imagen = productoBD.imagenUrl
+        productoBD.imagenUrl = productoBD.imagenUrl        
 
     productoBD.nombre = v_nombre
     productoBD.precio = v_precio
     productoBD.stock = v_stock
     productoBD.descripcion = v_descripcion
-    productoBD.categoriaId = v_categoria
-    productoBD.imagenUrl = v_imagen
+    productoBD.categoriaId = v_categoria    
+    
     
     productoBD.save()
 
-    return redirect('/tienda/crudProductos')
+    return redirect('/taller/crud/productos')
 
 
 
@@ -147,3 +148,109 @@ def agregarServicio(request):
         precio = v_precio,        
     )
     return redirect('/taller/crud/servicios')
+
+def eliminarServicio(request,serv_id):
+    servicio = Servicio.objects.get(pk = serv_id)
+    servicio.delete()
+    return redirect('/taller/crud/servicios')
+
+
+def cargarEditarServicio(request, serv_id):
+    serv = Servicio.objects.get(pk = serv_id)
+    empleados = Empleado.objects.all()
+    template = loader.get_template("taller/editarServicio.html")
+    context = {"servicio": serv, "empleados": empleados}
+    return HttpResponse(template.render(context, request))
+
+
+def editarServicio(request):
+    v_empleado = Empleado.objects.get(rut = request.POST['cmbEmpleado'])
+
+    v_sku = request.POST['txtSku']
+    servicioBD = Servicio.objects.get(pk = v_sku)
+    v_nombre = request.POST['txtnombre']
+    v_precio = request.POST['txtprecio']
+    v_descripcion = request.POST['txtDescripcion']
+
+    servicioBD.nombre = v_nombre
+    servicioBD.precio = v_precio
+    servicioBD.descripcion = v_descripcion
+    servicioBD.encargado = v_empleado
+    
+    servicioBD.save()
+
+    return redirect('/taller/crud/servicios')
+
+#Crud empleados
+
+def crudEmpleados(request):
+    vEmpleados = Empleado.objects.all
+    vTipo = Tipo_empleado.objects.all
+    vEstado = Estado_civil.objects.all
+    template = loader.get_template("taller/crudEmpleados.html")
+    context = {
+        "empleados": vEmpleados, "tipo": vTipo, "estadoCivil": vEstado
+    }
+    return HttpResponse(template.render(context, request))
+
+def agregarEmpleado(request):    
+    vRut = request.POST['txtRut']
+    vNombre = request.POST['txtnombre']
+    vApPaterno = request.POST['txtApPat']
+    vApMaterno = request.POST['txtApMat']
+    vNumero = request.POST['txtNumero'] 
+    vCorreo = request.POST['txtCorreo'] 
+    vDireccion = request.POST['txtDireccion'] 
+    vTipo = Tipo_empleado.objects.get(pk = request.POST['cmbTipo'])
+    vEstadoCivil = Estado_civil.objects.get(pk = request.POST['cmbCivil'])
+
+    Empleado.objects.create(
+        rut= vRut,
+        nombre= vNombre,
+        apellido_paterno=  vApPaterno,
+        apellido_materno= vApMaterno,
+        numero_contacto= vNumero,
+        correo_electronico= vCorreo,
+        direccion_vivienda= vDireccion,
+        estado_civil= vEstadoCivil,
+        tipo_empleado= vTipo
+    )
+    return redirect('/taller/crud/empleados')
+
+def eliminarEmpleado(request,rut):
+    Empleado.objects.get(pk = rut).delete()
+    return redirect('/taller/crud/empleados')
+
+def cargarEditarEmpleado(request, rut):
+    vEmpleado = Empleado.objects.get(pk = rut)
+    vTipo = Tipo_empleado.objects.all()
+    vCivil = Estado_civil.objects.all()
+    template = loader.get_template("taller/editarEmpleado.html")
+    context = {"empleado": vEmpleado, "tipo": vTipo, "estadoCivil": vCivil}
+    return HttpResponse(template.render(context, request))
+
+def editarEmpleado(request):
+    empleadoBD = Empleado.objects.get(rut = request.POST['txtRut'])
+    vNombre = request.POST['txtNombre']
+    vApPaterno = request.POST['txtApPat']
+    vApMaterno = request.POST['txtApMat']
+    vNumero = request.POST['txtNumero'] 
+    vCorreo = request.POST['txtCorreo'] 
+    vDireccion = request.POST['txtDireccion'] 
+    vTipo = Tipo_empleado.objects.get(pk = request.POST['cmbTipo'])
+    vEstadoCivil = Estado_civil.objects.get(pk = request.POST['cmbCivil'])
+
+
+    empleadoBD.nombre= vNombre
+    empleadoBD.apellido_paterno= vApPaterno
+    empleadoBD.apellido_materno= vApMaterno
+    empleadoBD.numero_contacto=  vNumero
+    empleadoBD.correo_electronico= vCorreo
+    empleadoBD.direccion_vivienda= vDireccion
+    empleadoBD.estado_civil= vEstadoCivil
+    empleadoBD.tipo_empleado= vTipo
+
+    
+    empleadoBD.save()
+
+    return redirect('/taller/crud/empleados')

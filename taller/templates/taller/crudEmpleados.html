@@ -1,0 +1,110 @@
+{% extends "./base.html"%}
+
+{% load static %}
+
+{% block body%}
+<!--Registrar un empleado-->
+
+    <div class="container">
+        <h1>Registro empleado</h1>
+        <form id="formAgregar" action="agregarEmpleadoForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="txtRut">Rut empleado:</label>
+                    <input name="txtRut" id="txtRut" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtnombre">Nombre:</label>
+                    <input name="txtnombre" id="txtnombre" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtApPat">Apellido paterno:</label>
+                    <input name="txtApPat" id="txtApPat" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtApMat">Apellido materno:</label>
+                    <input name="txtApMat" id="txtApMat" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtNumero">Numero de contacto:</label>
+                    <input name="txtNumero" id="txtNumero" type="number" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtCorreo">Correo electronico:</label>
+                    <input name="txtCorreo" id="txtCorreo" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="txtDireccion">Direccion de vivienda:</label>
+                    <input name="txtDireccion" id="txtDireccion" type="text" class="form-control">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="cmbTipo">Tipo de empleado:</label>
+                    <select id="cmbTipo" name="cmbTipo" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for tp in tipo %}
+                        <option value="{{tp.pk}}">{{tp.tipo_empleado}}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cmbCivil">Estado civil:</label>
+                    <select id="cmbCivil" name="cmbCivil" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for est in estadoCivil %}
+                        <option value="{{est.pk}}">{{est.pk}} {{ est.estado_civil }}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                
+
+
+            </div>
+            <button class="btn btn-success mt-5 w-100">Agregar servicio</button>
+        </form>
+    </div>
+
+
+
+<!--Lista de productos para eliminar y editar-->
+<div class="container mt-5">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Rut</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido paterno</th>
+            <th scope="col">Apellido materno</th>
+            <th scope="col">correo</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for emp in empleados %}
+          <tr>
+            <th scope="row">{{emp.pk}}</th>
+            <td>{{emp.nombre}}</td>
+            <td>{{emp.apellido_paterno}}</td>
+            <td>{{emp.apellido_materno}}</td>
+            <td>{{emp.correo_electronico}}</td>
+            <td><a href="editarEmpleado/{{emp.rut}}" class="btn btn-primary">Editar</a></td>
+            <td><a href="eliminarEmpleado/{{emp.rut}}" class="btn btn-danger">Eliminar</a></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+
+
+
+{% endblock %}

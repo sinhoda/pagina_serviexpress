@@ -1,0 +1,77 @@
+{% extends './base.html' %}
+
+{% load static %}
+
+
+
+{% block body %}
+
+   
+
+    <div class="container">
+        <h1>Editar empleado</h1>
+        <form action="/taller/crud/editarEmpleado" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="txtRut">Rut:</label>
+                    <input readonly value="{{empleado.pk}}" name="txtRut" id="txtRut" type="text" class="form-control" >
+                </div>
+
+                <div class="col-md-8">
+                    <label for="txtNombre">Nombre:</label>
+                    <input value="{{empleado.nombre}}" name="txtNombre" id="txtNombre" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtApPat">Apellido paterno:</label>
+                    <input name="txtApPat" id="txtApPat" type="text" class="form-control"  value="{{empleado.apellido_paterno}}">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtApMat">Apellido materno:</label>
+                    <input name="txtApMat" id="txtApMat" type="text" class="form-control" value="{{empleado.apellido_materno}}">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtNumero">Numero de contacto:</label>
+                    <input name="txtNumero" id="txtNumero" type="number" class="form-control" value="{{empleado.numero_contacto}}">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtCorreo">Correo electronico:</label>
+                    <input name="txtCorreo" id="txtCorreo" type="text" class="form-control" value="{{empleado.correo_electronico}}">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="txtDireccion">Direccion de vivienda:</label>
+                    <input name="txtDireccion" id="txtDireccion" type="text" class="form-control"  value="{{empleado.direccion_vivienda}}">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="cmbTipo">Tipo de empleado:</label>
+                    <select id="cmbTipo" name="cmbTipo" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for tp in tipo %}
+                        <option value="{{tp.pk}}" {% if tp.pk == empleado.tipo_empleado.pk %} selected {% endif %}>{{tp.tipo_empleado}}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cmbCivil">Estado civil:</label>
+                    <select id="cmbCivil" name="cmbCivil" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for est in estadoCivil %}
+                        <option value="{{est.pk}}"  {% if est.pk == empleado.estado_civil.pk %} selected {% endif %}>{{est.pk}} {{ est.estado_civil }}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+
+            </div>
+            <button class="btn btn-success mt-5 w-100">Editar producto</button>
+        </form>
+    </div>
+
+{% endblock %}
