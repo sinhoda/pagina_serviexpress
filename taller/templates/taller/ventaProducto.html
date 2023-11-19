@@ -13,6 +13,9 @@
 
 {% block body%}
 
+<div id="liveAlertPlaceholder"></div>
+
+
 
 <div class="container mt-3">
     
@@ -34,10 +37,7 @@
 
                 <p><strong>Precio:</strong>${{producto.precio}}</p>
                 <input id="precioProducto" value="{{producto.precio}}" type="number" hidden>
-                <label  for="cantidadComprarTxt"><strong>Cantidad a comprar</strong></label>
-                <br>    
-                <input id="cantidadComprarTxt" type="number" value="0">                
-                <br>
+
                 <button id="btnCantidadComprar" class="btn btn-success mt-1" >añadir producto al carrito</button>
 
             </div>
@@ -45,11 +45,6 @@
     </div>    
 </div>
 
-<form action="" class="" role="search">{% csrf_token %}
-    <div class="col col-md-12 mt-2">
-        <button id="prueba" class="btn btn-primary w-50">Realizar compra</button>
-    </div>
-     </form>
 
 
 {% endblock %}

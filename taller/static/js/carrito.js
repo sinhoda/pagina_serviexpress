@@ -14,59 +14,41 @@ $(function () {
 })
 
 
-function quitarCantidad(codigo){
-    let eliminado = false;
-    let sku = codigo
+function quitarCantidad(codigo){    
     let arrayTemporal = [];
-    let jsonStorage = localStorage.getItem("storageProductosCarrito");
-    let arrayCarrito = JSON.parse(jsonStorage);
-    
-    
-    console.log(arrayCarrito);
+    let carrito = JSON.parse(localStorage.getItem("carrito"));
+    console.log(carrito);
 
-
-
-
-    let index = arrayCarrito.findIndex(object => {
-        return object.sku == sku;
+    let index = carrito.findIndex(object => {
+        return object.id_producto == codigo;
     })
-
-    console.log(index);
-
     
-    
-    arrayCarrito[index].cantidad = arrayCarrito[index].cantidad - 1;   
+    carrito[index].cantidad -= 1;   
 
-    let filtro = arrayCarrito.filter(e => e.cantidad <= 0);
-    console.log("filtro",filtro);
-    if(filtro.length > 0){
-        for (const i of arrayCarrito) {
-            if(i.sku != codigo){
-                arrayTemporal.push(i);
-            }
-            else{
-                eliminado = true
-            }
+    carrito.forEach(producto => {
+        if (producto.cantidad > 0){
+            arrayTemporal.push(producto)
         }
-    }
+    });
 
     console.log(arrayTemporal);
-    if(eliminado){
-        let setStorage = JSON.stringify(arrayTemporal);
-        localStorage.setItem("storageProductosCarrito",setStorage);  
-    }
-    else{
-        let setStorage = JSON.stringify(arrayCarrito);
-        localStorage.setItem("storageProductosCarrito",setStorage);  
-    }
-    
+   
+    let cantidad = carrito[index].cantidad ;
+    let precio = carrito[index].cantidad * carrito[index].precio;
+    $(`#cantidadProductos${codigo}`).text(cantidad)
+    $(`#precioTotal${codigo}`).text(precio)
 
 
-    let cantidad = arrayCarrito[index].cantidad;
-    let precio = arrayCarrito[index].precio;
-    cargarCarrito(codigo,cantidad,precio);
-    totalPagar();
+
+    if (carrito[index].cantidad <= 0){
+        $(`#prodCod${codigo}`).remove()
+
+    } 
+
+    localStorage.setItem("carrito", JSON.stringify(arrayTemporal)) 
+    totalCarrito();
 }
+
 
 
 function agregarCantidad(codigo){
@@ -75,8 +57,11 @@ function agregarCantidad(codigo){
         return object.id_producto == codigo;
     })
 
-    carrito[index].cantidad +=  1;   
-    let cantidad = carrito[index].cantidad += 1;
+    carrito[index].cantidad =  carrito[index].cantidad  + 1;   
+    
+    console.log(carrito);
+
+    let cantidad = carrito[index].cantidad ;
     let precio = carrito[index].cantidad * carrito[index].precio;
     
     $(`#cantidadProductos${codigo}`).text(cantidad)
@@ -87,6 +72,7 @@ function agregarCantidad(codigo){
     
     totalCarrito();
 };
+
 
 function totalCarrito(){
     let carrito = JSON.parse(localStorage.getItem("carrito"));
@@ -133,7 +119,10 @@ function cargar(){
             
         </div>
         <div class="col">
-            <p id="precioTotal${idProducto}" class="p">${precioTotal}</p>
+            <p id="precioUnitario${idProducto}" class="p">$${precioProducto}</p>
+        </div>
+        <div class="col">
+            <p id="precioTotal${idProducto}" class="p">$${precioTotal}</p>
         </div>
         </div>`);
         
@@ -141,3 +130,4 @@ function cargar(){
         }
         totalCarrito()
 }
+
