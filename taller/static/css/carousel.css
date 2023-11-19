@@ -1,0 +1,37 @@
+.carousel-item{
+    height: 480px;
+    background-color: rgb(61, 61, 61);
+    color: #f6d573;
+    position: relative;
+}
+
+.carousel-item .container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 50px;
+}
+.overlay-image{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.5;
+    
+}
+
+#overlay-image-flores{
+    background-image: url("../img/repuestos.webp");
+}
+
+#overlay-image-herramienta{
+    background-image: url("../img/productosJardineria.png");
+}
+
+#overlay-image-macetero{
+    background-image: url("../img/maceteros.png");
+}

@@ -1,0 +1,58 @@
+{% extends "./base.html"%}
+
+{% load static %}
+
+
+{% block body %}
+
+<div class="container text-center">
+    <h1>
+        Carrito de compra
+    </h1>
+    <div  class="row mt-5 rowProducto">
+        <div class="col">
+            <p>Imagen</p>
+        </div>
+        <div class="col text-center">
+            <p>Nombre</p>
+        </div>
+
+        <div class="col">
+            <p>Cantidad</p>
+        </div>
+        <div class="col">
+            <p>Precio unitario</p>
+        </div>
+        <div class="col">
+            <p>Precio total</p>
+        </div>
+    </div>
+    
+    <div  id="containerCarrito" class="container"></div>
+
+    <div class="row mt-2">
+        <div class="col col-md-6">
+            <p>Total a pagar: </p> 
+        </div>
+        <div class="col col-md-6">
+            <p value="0" id="totalPagar"> </p>
+        </div>
+        <form action="" class="" role="search">{% csrf_token %}
+        <div class="col col-md-12 mt-2">
+            <button id="btnComprar" class="btn btn-primary w-50">Realizar compra</button>
+        </div>
+         </form>
+    </div>
+</div>
+
+
+<button id="prueba">a</button>
+{% endblock %}
+
+{% block script %}
+
+<script src="{% static 'js/carrito.js' %}"></script>
+
+
+{% endblock %}
+

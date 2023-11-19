@@ -1,18 +1,61 @@
 {% extends "./base.html"%}
 
+
+
 {% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/ventaProductos.css' %}">
+
+{% endblock %}
+
 
 {% block body%}
 
 
-<div class="container">
-    <h1>Venta producto</h1>
-
+<div class="container mt-3">
     
-    <p>{{producto.nombre_producto}}</p>
+    <div id="ventaDiv" class="row text-center">
+        <div class="col-lg-6 col-sm-12 col-md-12">
+            <img src="{{producto.imagenUrl.url}}" class="" alt="{{producto.descripcion}}">
+            <input value="{{producto.imagenUrl.url}}" id="imagenProducto" type="text" hidden>
+        </div>
 
-    
+        <div class="col-lg-6 ">
+            <div class="container">
+                <p><strong>Nombre de producto:</strong> {{producto.nombre_producto}} </p>  
+                <input id="nombreProducto" value="{{producto.nombre_producto}}" type="text" hidden>
+                <p value="{{producto.id_producto}}"><Strong>Codigo de producto:</Strong> {{producto.id_producto}}</p>
+                <input id="idProducto" value="{{producto.id_producto}}" type="number" hidden>
+                <p><strong>Descripcion: </strong>  {{producto.descripcion}}</p>
+                
+                <p><strong>Stock:</strong> {{producto.stock}}</p>
+
+                <p><strong>Precio:</strong>${{producto.precio}}</p>
+                <input id="precioProducto" value="{{producto.precio}}" type="number" hidden>
+                <label  for="cantidadComprarTxt"><strong>Cantidad a comprar</strong></label>
+                <br>    
+                <input id="cantidadComprarTxt" type="number" value="0">                
+                <br>
+                <button id="btnCantidadComprar" class="btn btn-success mt-1" >añadir producto al carrito</button>
+
+            </div>
+        </div>
+    </div>    
 </div>
 
+<form action="" class="" role="search">{% csrf_token %}
+    <div class="col col-md-12 mt-2">
+        <button id="prueba" class="btn btn-primary w-50">Realizar compra</button>
+    </div>
+     </form>
+
+
+{% endblock %}
+
+{% block script %}
+
+<script src="{% static 'js/agregarCarrito.js' %}"></script>
 
 {% endblock %}

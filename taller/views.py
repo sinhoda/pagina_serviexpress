@@ -109,7 +109,7 @@ def editarProducto(request):
     except:
         productoBD.imagenUrl = productoBD.imagenUrl        
 
-    productoBD.nombre = v_nombre
+    productoBD.nombre_producto = v_nombre
     productoBD.precio = v_precio
     productoBD.stock = v_stock
     productoBD.descripcion = v_descripcion
@@ -240,7 +240,6 @@ def editarEmpleado(request):
     vTipo = Tipo_empleado.objects.get(pk = request.POST['cmbTipo'])
     vEstadoCivil = Estado_civil.objects.get(pk = request.POST['cmbCivil'])
 
-
     empleadoBD.nombre= vNombre
     empleadoBD.apellido_paterno= vApPaterno
     empleadoBD.apellido_materno= vApMaterno
@@ -249,8 +248,13 @@ def editarEmpleado(request):
     empleadoBD.direccion_vivienda= vDireccion
     empleadoBD.estado_civil= vEstadoCivil
     empleadoBD.tipo_empleado= vTipo
-
     
     empleadoBD.save()
 
     return redirect('/taller/crud/empleados')
+
+
+def carrito(request):
+    template = loader.get_template("taller/carrito.html")
+    context = {"hola": False}
+    return HttpResponse(template.render(context, request))

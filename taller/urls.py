@@ -24,5 +24,6 @@ urlpatterns = [
     path('crud/eliminarEmpleado/<int:rut>',views.eliminarEmpleado, name="eliminarEmpleado"),
     path('crud/editarEmpleado/<int:rut>',views.cargarEditarEmpleado, name="editarEmpleado"),
     path('crud/editarEmpleado',views.editarEmpleado),
-
+    #Compra y carrito
+    path('carrito', views.carrito, name="carrito")
 ]
