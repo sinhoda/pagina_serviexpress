@@ -1,3 +1,15 @@
 .rowProducto{
-    border: solid black 10px;
+    border: solid rgb(61, 61, 61) 3px;
+    background-color: rgb(214, 214, 214);
+    border-radius: 30px;
+}
+
+.imgCarrito{
+    border: solid blue 5px;
+    border-radius: 30px;
+}
+p{
+    color: red;
+    text-align: center;
+    font-size: 20px;
 }

@@ -1,8 +1,9 @@
-$(function () {
+$(function () {    
     if (localStorage.getItem("carrito") == null) {
+        localStorage.setItem("carrito", JSON.stringify([]))
         console.log("no hay items");
         let contCarrito = $("#containerCarrito");
-        let html = $(`<h1> No se han agregado productos al carrito   </h1>`)
+        let html = $(`<h1> No se han agregado productos al carrito   </h1>`)        
         contCarrito.append(html)
     } else {
         console.log("si hay items");
@@ -32,12 +33,6 @@ function quitarCantidad(codigo){
     });
 
     console.log(arrayTemporal);
-   
-    let cantidad = carrito[index].cantidad ;
-    let precio = carrito[index].cantidad * carrito[index].precio;
-    $(`#cantidadProductos${codigo}`).text(cantidad)
-    $(`#precioTotal${codigo}`).text(precio)
-
 
 
     if (carrito[index].cantidad <= 0){
@@ -46,7 +41,8 @@ function quitarCantidad(codigo){
     } 
 
     localStorage.setItem("carrito", JSON.stringify(arrayTemporal)) 
-    totalCarrito();
+    cargar()
+    
 }
 
 
@@ -61,16 +57,11 @@ function agregarCantidad(codigo){
     
     console.log(carrito);
 
-    let cantidad = carrito[index].cantidad ;
-    let precio = carrito[index].cantidad * carrito[index].precio;
-    
-    $(`#cantidadProductos${codigo}`).text(cantidad)
-    $(`#precioTotal${codigo}`).text(precio)
-
     localStorage.setItem("carrito", JSON.stringify(carrito));  
 
     
-    totalCarrito();
+    cargar()
+    
 };
 
 
@@ -85,9 +76,17 @@ function totalCarrito(){
 
 
 function cargar(){
+    $(".rowProducto").remove()
     let carrito = JSON.parse(localStorage.getItem("carrito"))
         console.log(carrito);
-        let contCarrito = $("#containerCarrito");
+        if(carrito.length <= 0){
+            let contCarrito = $("#containerCarrito");
+            let html = $(`<h1> No se han agregado productos al carrito   </h1>`)        
+            contCarrito.append(html)
+
+        } else{
+
+            let contCarrito = $("#containerCarrito");
         for (const c of carrito) {
             let idProducto  = c.id_producto;
             let nombreProducto =   c.nombre;
@@ -97,12 +96,12 @@ function cargar(){
             let precioTotal = precioProducto * vCantidad;
 
 
-            let html = $(`<div id="prodCod${idProducto}" class="row mt-3 rowProducto">
+            let html = $(`<div id="prodCod${idProducto}" class="row mt-3 rowProducto text">
         <div class="col">
             <img class="imgCarrito" src=${imagenProducto} alt="" srcset="" width="100px" height="100px">
         </div>
         <div class="col text-center">
-            <p id="nombreProducto">${nombreProducto}</p>
+            <p id="nombreProducto">Producto: ${nombreProducto}</p>
         </div>
         <div class="col">
             <p id="cantidadProductos${idProducto}"> ${vCantidad} </p>
@@ -119,15 +118,19 @@ function cargar(){
             
         </div>
         <div class="col">
-            <p id="precioUnitario${idProducto}" class="p">$${precioProducto}</p>
+            <p id="precioUnitario${idProducto}" class="p">Precio unitario: $${precioProducto}</p>
         </div>
         <div class="col">
-            <p id="precioTotal${idProducto}" class="p">$${precioTotal}</p>
+            <p id="precioTotal${idProducto}" class="p">Precio total: $${precioTotal}</p>
         </div>
         </div>`);
         
             contCarrito.append(html);
         }
         totalCarrito()
+
+        }
+
+        
 }
 
