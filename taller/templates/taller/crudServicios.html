@@ -10,22 +10,18 @@
     <div class="container">
         <form id="formAgregar" action="agregarServicioForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
-                <div class="col-md-4">
-                    <label for="txtIdServicio">Id del servicio:</label>
-                    <input name="txtIdServicio" id="txtIdServicio" type="text" class="form-control">
-                </div>
 
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <label for="txtnombre">Nombre servicio:</label>
                     <input name="txtnombre" id="txtnombre" type="text" class="form-control">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="txtprecio">Precio del servicio:</label>
                     <input name="txtprecio" id="txtprecio" type="text" class="form-control">
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <label for="cmbEncargado">Encargado del servicio:</label>
                     <select id="cmbEncargado" name="cmbEncargado" class="form-select" aria-label="Default select example">
                         <option disabled selected>Seleccione</option>

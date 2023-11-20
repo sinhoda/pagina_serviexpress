@@ -9,12 +9,8 @@
         <h1>Crear categoria</h1>
         <form id="formAgregar" action="agregarCategoriaForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
-                <div class="col-md-4">
-                    <label for="txtIdCategoria">Id de categoria:</label>
-                    <input name="txtIdCategoria" id="txtIdCategoria" type="text" class="form-control">
-                </div>
 
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <label for="txtnombreCategoria">Nombre categoria:</label>
                     <input name="txtnombreCategoria" id="txtnombreCategoria" type="text" class="form-control">
                 </div>
@@ -33,28 +29,23 @@
         <h1>Agregar producto</h1>
         <form id="formAgregar" action="agregarProductoForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
-                <div class="col-md-4">
-                    <label for="txtSku">Id del producto:</label>
-                    <input name="txtSku" id="txtSku" type="text" class="form-control">
-                </div>
-
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <label for="txtnombre">Nombre:</label>
                     <input name="txtnombre" id="txtnombre" type="text" class="form-control">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="txtprecio">Precio:</label>
                     <input name="txtprecio" id="txtprecio" type="text" class="form-control">
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="txtStock">Stock:</label>
                     <input name="txtStock" id="txtStock" type="text" class="form-control">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="cmbCategoria">Categoria:</label>
                     <select id="cmbCategoria" name="cmbCategoria" class="form-select" aria-label="Default select example">
                         <option disabled selected>Seleccione una categoria</option>

@@ -11,9 +11,26 @@
 
 {% block body %}
 
+<form action="/taller/carrito/realizarCompraForm" class="" method="POST"  enctype="multipart/form-data">{% csrf_token %}
 <div class="container text-center mt-5">
-
     <div  id="containerCarrito" class="container mt-3">
+        <div class="row" id="rowTitulos">
+            <div class="col">
+                <strong>Imagen</strong> 
+            </div>
+            <div class="col">
+                <strong>Producto</strong>
+            </div>
+            <div class="col">
+                <strong>Cantidad</strong>
+            </div>
+            <div class="col">
+                <strong>Precio unitario</strong>
+            </div>
+            <div class="col">
+                <strong>Precio total</strong>
+            </div>
+        </div>
         
     </div>
 
@@ -24,11 +41,11 @@
         <div class="col col-md-6">
             <p value="0" id="totalPagar"> </p>
         </div>
-        <form action="" class="" role="search">{% csrf_token %}
+        
         <div class="col col-md-12 mt-2">
             <button id="btnComprar" class="btn btn-primary w-50">Realizar compra</button>
         </div>
-         </form>
+        </form>
     </div>
 </div>
 

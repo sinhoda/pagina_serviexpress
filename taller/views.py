@@ -46,13 +46,10 @@ def eliminarProducto(request,prod_id):
     return redirect('/taller/crud/productos')
 
 def agregarCategoria(request):
-
-    v_id = request.POST['txtIdCategoria']
     v_nombre = request.POST['txtnombreCategoria']
 
 
     Categoria_producto.objects.create(
-        id_categoria = v_id, 
         nombre_categoria = v_nombre, 
         )
     
@@ -62,7 +59,6 @@ def agregarCategoria(request):
 def agregarProducto(request):
     v_categoria = Categoria_producto.objects.get(id_categoria = request.POST['cmbCategoria'])
     
-    v_sku = request.POST['txtSku']
     v_nombre = request.POST['txtnombre']
     v_precio = request.POST['txtprecio']
     v_stock = request.POST['txtStock']
@@ -70,7 +66,6 @@ def agregarProducto(request):
     v_imagen = request.FILES['txtImagen']
 
     Producto.objects.create(
-        id_producto = v_sku, 
         nombre_producto = v_nombre, 
         precio = v_precio,
         stock = v_stock, 
@@ -135,13 +130,11 @@ def crudServicios(request):
 
 def agregarServicio(request):    
     v_empleado = Empleado.objects.get(pk = request.POST['cmbEncargado'])
-    v_id = request.POST['txtIdServicio']
     v_nombre = request.POST['txtnombre']
     v_precio = request.POST['txtprecio']
     v_descripcion = request.POST['txtDescripcion']
 
     Servicio.objects.create(
-        id_servicio = v_id, 
         nombre_servicio = v_nombre, 
         descripcion = v_descripcion, 
         encargado = v_empleado,
@@ -253,8 +246,13 @@ def editarEmpleado(request):
 
     return redirect('/taller/crud/empleados')
 
-
+#Carrito y realizar compra
 def carrito(request):
     template = loader.get_template("taller/carrito.html")
     context = {"hola": False}
     return HttpResponse(template.render(context, request))
+
+def realizarCompra(request):
+    idProductos = request.POST['idProductoTxt']
+    print(idProductos)
+    return redirect('/taller/carrito')

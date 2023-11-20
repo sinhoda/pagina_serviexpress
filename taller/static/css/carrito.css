@@ -5,11 +5,14 @@
 }
 
 .imgCarrito{
-    border: solid blue 5px;
+    border: solid black 5px;
     border-radius: 30px;
 }
 p{
-    color: red;
     text-align: center;
     font-size: 20px;
+}
+#rowTitulos{
+    font-size: 30px;
+    
 }

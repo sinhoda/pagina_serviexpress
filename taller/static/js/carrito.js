@@ -95,13 +95,14 @@ function cargar(){
             let vCantidad = c.cantidad;
             let precioTotal = precioProducto * vCantidad;
 
+            console.log(idProducto);
 
             let html = $(`<div id="prodCod${idProducto}" class="row mt-3 rowProducto text">
         <div class="col">
             <img class="imgCarrito" src=${imagenProducto} alt="" srcset="" width="100px" height="100px">
         </div>
         <div class="col text-center">
-            <p id="nombreProducto">Producto: ${nombreProducto}</p>
+            <p id="nombreProducto">${nombreProducto}</p>
         </div>
         <div class="col">
             <p id="cantidadProductos${idProducto}"> ${vCantidad} </p>
@@ -118,11 +119,12 @@ function cargar(){
             
         </div>
         <div class="col">
-            <p id="precioUnitario${idProducto}" class="p">Precio unitario: $${precioProducto}</p>
+            <p id="precioUnitario${idProducto}" class="p"> $${precioProducto}</p>
         </div>
         <div class="col">
-            <p id="precioTotal${idProducto}" class="p">Precio total: $${precioTotal}</p>
+            <p id="precioTotal${idProducto}" class="p">$${precioTotal}</p>
         </div>
+        <input value="${idProducto}" id="idProductoTxt" type="number" hidden>
         </div>`);
         
             contCarrito.append(html);
