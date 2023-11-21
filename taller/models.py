@@ -9,17 +9,6 @@ class Taller(models.Model):
     telefono= models.IntegerField(default=0)
     ciudad= models.CharField(max_length=200)
 
-
-class Cliente(models.Model):
-    rut= models.CharField(max_length=12, primary_key=True)
-    nombre= models.CharField(max_length=200)
-    apellido_paterno= models.CharField(max_length=200)
-    apellido_materno= models.CharField(max_length=200)
-    numero_contacto= models.IntegerField()
-    correo_electronico= models.CharField(max_length=200)    
-    direccion_vivienda= models.CharField(max_length=200)
-    autos= models.CharField(max_length=200, null=True, blank=True) #Cambiar a futuro
-
 class Auto(models.Model):
     patente= models.CharField(max_length=6, primary_key=True)
     marca= models.CharField(max_length=200)
@@ -29,9 +18,29 @@ class Auto(models.Model):
         txt = "Patente: {0} - Marca: {1} - Modelo: {2} - Año: {3}"
         return txt.format(self.patente , self.marca, self.modelo, self.anio_auto)
 
+class Cliente(models.Model):
+    rut= models.CharField(max_length=12, primary_key=True)
+    nombre= models.CharField(max_length=200)
+    apellido_paterno= models.CharField(max_length=200)
+    apellido_materno= models.CharField(max_length=200)
+    numero_contacto= models.IntegerField()
+    correo_electronico= models.CharField(max_length=200)    
+    direccion_vivienda= models.CharField(max_length=200)
+    autos= models.ManyToManyField(Auto, null=True, blank=True) #Cambiar a futuro
 
+class Rubro(models.Model):
+    id_rubro = models.AutoField(primary_key=True)  
+    nombre_rubro = models.CharField(max_length=200)
+    
 
- 
+class Proveedor(models.Model):
+    id_proveedor = models.AutoField(primary_key=True)  
+    nombre_proveedor = models.CharField(max_length=200)
+    rubro = models.ForeignKey(Rubro, on_delete=models.CASCADE)
+    telefono = models.IntegerField()
+    correo_electronico = models.CharField(max_length=200)
+    informacion_extra = models.CharField(max_length=200, null=True, blank=True)
+
 
 class Categoria_producto(models.Model):
     id_categoria = models.AutoField(primary_key=True)
@@ -40,7 +49,6 @@ class Categoria_producto(models.Model):
         txt = "Categoria: {0}"
         return txt.format(self.nombre_categoria)
 
-
 class Producto(models.Model):
     id_producto= models.AutoField(primary_key=True)
     nombre_producto= models.CharField(max_length=200)
@@ -48,6 +56,7 @@ class Producto(models.Model):
     descripcion= models.CharField(max_length=200)
     imagenUrl = models.ImageField(upload_to="imagenesProducto")
     stock = models.IntegerField(default=0)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria_producto, on_delete=models.CASCADE)
     def __str__(self):
         txt = "id: {0} - nombre: {1} - precio: {2}"
@@ -82,23 +91,24 @@ class Empleado(models.Model):
         txt = "rut: {0} - nombre: {1} - apellido paterno: {2} - apellido materno: {3} - tipo empleado: {4}"
         return txt.format(self.rut, self.nombre, self.apellido_paterno, self.apellido_materno, self.tipo_empleado)
 
-
 class Servicio(models.Model):
     id_servicio= models.AutoField(primary_key=True)
     nombre_servicio= models.CharField(max_length=200)
     descripcion= models.CharField(max_length=200)
-    encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    encargado = models.ManyToManyField(Empleado)
     precio= models.IntegerField(default=1)
+    imagenUrl = models.ImageField(upload_to="imagenesServicios")
     def __str__(self):
         txt = "id: {0} - servicio: {1} - precio: {2} - encargado: {3}"
         return txt.format(self.id_servicio, self.nombre_servicio, self.precio, self.encargado)
-
+    
 
 class Reserva(models.Model):
     id_reserva= models.AutoField(primary_key=True)
     precio= models.IntegerField(default=0)   
-    fecha_atencion = models.DateField(auto_now_add=True)
+    fecha_solicitud = models.DateField(auto_now_add=True)
     FK_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    fecha_realizar = models.DateField()
     
 
 class Detalle_reserva(models.Model):
@@ -107,19 +117,4 @@ class Detalle_reserva(models.Model):
     FK_servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     
 
-class Venta(models.Model):
-    id_venta = models.AutoField(primary_key=True)
-    FK_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    fecha = models.DateField(auto_now_add=True)
-    valor_total = models.IntegerField(null=True,blank=True)
-    def __str__(self):
-        txt = "id: {0} - cliente: {1} - fecha: {2}"
-        return txt.format(self.id_venta, self.FK_cliente, self.fecha)
-
-class Detalle_venta(models.Model):
-    id_detalle_venta = models.AutoField(primary_key=True)
-    FK_id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    FK_producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    valor = models.IntegerField()
-    cantidad = models.IntegerField()
     

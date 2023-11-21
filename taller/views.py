@@ -4,25 +4,25 @@ from django.http import HttpResponse
 from django.template import loader
 import os
 from django.conf import settings
-
-
 from .models import *
+from django.http import JsonResponse
+import json
 
 
 def index(request):
-    vProductos = Producto.objects.all
+    vServicios = Producto.objects.all
     template = loader.get_template("taller/index.html")
     context = {
-        "productos": vProductos
+        "servicios": vServicios
     }
     
     return HttpResponse(template.render(context, request))
 
-def ventaProducto(request, prod_id):
+def ventaServicios(request, serv_id):
     template = loader.get_template("taller/ventaProducto.html")
     try:
-        vProducto = Producto.objects.get(pk=prod_id)
-        context = { "producto": vProducto}
+        vServicio = Servicio.objects.get(pk=serv_id)
+        context = { "servicio": vServicio}
     except Producto.DoesNotExist:
         raise Http404("Producto no existe")
     return HttpResponse(template.render(context, request))
@@ -47,8 +47,6 @@ def eliminarProducto(request,prod_id):
 
 def agregarCategoria(request):
     v_nombre = request.POST['txtnombreCategoria']
-
-
     Categoria_producto.objects.create(
         nombre_categoria = v_nombre, 
         )
@@ -252,7 +250,61 @@ def carrito(request):
     context = {"hola": False}
     return HttpResponse(template.render(context, request))
 
-def realizarCompra(request):
-    idProductos = request.POST['idProductoTxt']
-    print(idProductos)
-    return redirect('/taller/carrito')
+def confirmarServicio(request):
+    
+    if request.method == 'POST':
+        data = request.POST.get('mi_dato')
+        jdata = json.loads(data)
+
+        
+        print(jdata)
+
+
+        return JsonResponse({'mensaje': 'Datos recibidos correctamente.'})
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+    
+
+
+#CRUD Proveedor
+
+def crudProveedores(request):
+    vRubros = Rubro.objects.all
+    vProveedores = Proveedor.objects.all
+    template = loader.get_template("taller/crudProveedores.html")
+    context = {
+        "proveedores": vProveedores, "rubros": vRubros
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def agregarRubro(request):
+    v_nombre = request.POST['txtNombreRubro']
+    Rubro.objects.create(
+        nombre_rubro = v_nombre, 
+        )
+    
+    return redirect('/taller/crud/proveedores')
+
+
+def agregarProveedor(request):
+    v_nombre = request.POST['txtNombreProveedor']
+    v_telefono = request.POST['txtTelefono']
+    v_correo = request.POST['txtCorreo']
+    v_rubro = Rubro.objects.get(pk = request.POST['cmbRubro'])
+    v_extra = request.POST['txtDatosExtras']
+
+    Proveedor.objects.create(
+        nombre_proveedor = v_nombre,
+        rubro = v_rubro,
+        telefono = v_telefono,
+        correo_electronico = v_correo,
+        informacion_extra = v_extra,
+    )
+    
+    return redirect('/taller/crud/proveedores')
+
+def eliminarProveedor(request,prov_id):
+    Proveedor.objects.get(pk = prov_id).delete()
+    return redirect('/taller/crud/proveedores')

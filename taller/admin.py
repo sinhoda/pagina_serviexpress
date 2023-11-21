@@ -15,8 +15,7 @@ admin.site.register(Categoria_producto)
 admin.site.register(Producto)   
 admin.site.register(Estado_civil)   
 admin.site.register(Tipo_empleado)
-admin.site.register(Venta)
-admin.site.register(Detalle_venta)
+
 
 
 

@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("producto/<int:prod_id>/", views.ventaProducto, name="ventaProducto"),
+    path("servicio/<int:serv_id>/", views.ventaServicios, name="ventaProducto"),
     #CrudProductos
     path("crud/productos", views.crudProductos, name="crudProductos"),
     path('crud/eliminarProducto/<int:prod_id>',views.eliminarProducto, name="eliminarProducto"),
@@ -26,6 +26,10 @@ urlpatterns = [
     path('crud/editarEmpleado',views.editarEmpleado),
     #Compra y carrito
     path('carrito', views.carrito, name="carrito"),
-    path('carrito/realizarCompraForm',views.realizarCompra),
-    
+    path('carrito/confirmarServicio', views.confirmarServicio),
+    #CRUD Proveedores
+    path("crud/proveedores", views.crudProveedores, name="crudProveedores"),
+    path('crud/proveedores/agregarRubroForm',views.agregarRubro),
+    path('crud/proveedores/agregarProveedorForm',views.agregarProveedor),
+    path('crud/proveedores/eliminarProveedor/<int:prov_id>',views.eliminarProveedor, name="eliminarProducto"),
 ]

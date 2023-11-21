@@ -12,6 +12,39 @@ $(function () {
     }
 
 
+    $("#btnComprar").on("click", function(){
+        let carrito = JSON.parse(localStorage.getItem("carrito"))
+        let productos = [];
+        carrito.forEach(p => {
+            let producto = {
+                "id": p.id_producto,
+                "cantidad": p.cantidad
+            }
+            productos.push(producto)
+        });
+
+        var csrfToken = $(this).data("csrf-token");
+        var datos = {
+            mi_dato: JSON.stringify(productos),
+            csrfmiddlewaretoken: csrfToken,
+        };
+        
+
+        $.ajax({
+            type: 'POST',
+            url: 'carrito/confirmarServicio',
+            data: datos,
+            success: function(response) {
+                console.log(response);
+                // Manejar la respuesta del servidor aquí
+            },
+            error: function(error) {
+                console.log(error);
+                // Manejar errores aquí
+            }
+        });
+    })
+
 })
 
 
@@ -124,7 +157,7 @@ function cargar(){
         <div class="col">
             <p id="precioTotal${idProducto}" class="p">$${precioTotal}</p>
         </div>
-        <input value="${idProducto}" id="idProductoTxt" type="number" hidden>
+        
         </div>`);
         
             contCarrito.append(html);

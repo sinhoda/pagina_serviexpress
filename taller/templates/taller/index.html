@@ -71,16 +71,16 @@
 
 
 <div class="container mt-5 text-center" >
-    <h1>Productos destacados</h1>
+    <h1>Servicios destacados</h1>
     <div class="row">        
-        {% for p in productos %}
+        {% for s in servicios %}
         <div class="col">
             <div class="card" style="width: 18rem;">
-                <img src="{{p.imagenUrl.url}}" class="card-img-top" alt="..." height="150px" width="100px">
+                <img src="{{s.imagenUrl.url}}" class="card-img-top" alt="..." height="150px" width="100px">
                 <div class="card-body">
-                    <h5 class="card-title">{{p.nombre_producto}}</h5>
-                    <p class="card-text">${{p.precio}}</p>
-                    <a href="producto/{{p.id_producto}}" class="btn btn-primary">Ver producto</a>
+                    <h5 class="card-title">{{s.nombre_servicio}}</h5>
+                    <p class="card-text">${{s.precio}}</p>
+                    <a href="producto/{{s.id_servicio}}" class="btn btn-primary">Ver producto</a>
                 </div>
             </div>
         </div>

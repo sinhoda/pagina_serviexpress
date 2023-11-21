@@ -1,0 +1,105 @@
+{% extends "./base.html"%}
+
+{% load static %}
+
+{% block body%}
+
+
+    <div class="container">
+        <h1>Crear rubro</h1>
+        <form id="formAgregar" action="proveedores/agregarRubroForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+
+                <div class="col-md-12">
+                    <label for="txtNombreRubro">Nombre rubro:</label>
+                    <input name="txtNombreRubro" id="txtNombreRubro" type="text" class="form-control">
+                </div>
+
+                
+            <button class="btn btn-success mt-5 w-100">Agregar categoria</button>
+        </form>
+    </div>
+
+
+    <hr>
+<!--Agregar un producto-->
+
+
+    <div class="container mt-3">
+        <h1>Agregar proveedor</h1>
+        <form id="formAgregar" action="proveedores/agregarProveedorForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="txtNombreProveedor">Nombre:</label>
+                    <input name="txtNombreProveedor" id="txtNombreProveedor" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="txtTelefono">Telefono de contacto:</label>
+                    <input name="txtTelefono" id="txtTelefono" type="number" class="form-control">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="txtCorreo">Correo electronico:</label>
+                    <input name="txtCorreo" id="txtCorreo" type="text" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cmbRubro">Rubro:</label>
+                    <select id="cmbRubro" name="cmbRubro" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione una categoria</option>
+                        {% for r in rubros %}
+                        <option value="{{r.id_rubro}}">{{r.nombre_rubro}}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                <div class="col-md-12">
+                    <label for="txtDatosExtras">Datos extras:</label>
+                    <input name="txtDatosExtras" id="txtDatosExtras" type="text" class="form-control">
+                </div>
+
+            </div>
+            <button class="btn btn-success mt-5 w-100">Agregar proveedor</button>
+        </form>
+    </div>
+
+    
+
+
+<!--Lista de productos para eliminar y editar-->
+<div class="container mt-5">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID Proovedor</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Rubro</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+           {% for p in proveedores %}
+          <tr>
+            <th scope="row">{{p.id_proveedor}}</th>
+            <td>{{p.nombre_proveedor}}</td>
+            <td>{{p.rubro.nombre_rubro}}</td>
+            <td>{{p.correo_electronico}}</td>
+            <td>{{p.telefono}}</td>
+            <td>Hacer algo</td>
+            <td><a href="editarProducto/{{p.id_producto}}" class="btn btn-primary">Editar</a></td>
+            <td><a href="proveedores/eliminarProveedor/{{p.id_proveedor}}" class="btn btn-danger">Eliminar</a></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+
+
+
+{% endblock %}
