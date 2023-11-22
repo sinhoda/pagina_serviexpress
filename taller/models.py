@@ -95,7 +95,7 @@ class Servicio(models.Model):
     id_servicio= models.AutoField(primary_key=True)
     nombre_servicio= models.CharField(max_length=200)
     descripcion= models.CharField(max_length=200)
-    encargado = models.ManyToManyField(Empleado)
+    encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     precio= models.IntegerField(default=1)
     imagenUrl = models.ImageField(upload_to="imagenesServicios")
     def __str__(self):

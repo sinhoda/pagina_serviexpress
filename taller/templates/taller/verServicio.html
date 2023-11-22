@@ -1,0 +1,54 @@
+{% extends "./base.html"%}
+
+
+
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/ventaProductos.css' %}">
+
+{% endblock %}
+
+
+{% block body%}
+
+<div id="liveAlertPlaceholder"></div>
+
+
+
+<div class="container mt-3">
+    
+    <div id="ventaDiv" class="row text-center">
+        <div class="col-lg-6 col-sm-12 col-md-12">
+            <img src="{{servicio.imagenUrl.url}}" class="" alt="{{servicio.descripcion}}">
+            <input value="{{servicio.imagenUrl.url}}" id="imagenServicio" type="text" hidden>
+        </div>
+
+        <div class="col-lg-6 ">
+            <div class="container">
+                <p><strong>Nombre de servicio:</strong> {{servicio.nombre_servicio}} </p>  
+                <input id="nombreServicio" value="{{servicio.nombre_servicio}}" type="text" hidden>
+                <p value="{{servicio.id_servicio}}"><Strong>Codigo de servicio:</Strong> {{servicio.id_servicio}}</p>
+                <input id="idServicio" value="{{servicio.id_servicio}}" type="number" hidden>
+                <p><strong>Descripcion: </strong>  {{servicio.descripcion}}</p>
+            
+
+                <p><strong>Precio de servicio:</strong>${{servicio.precio}}</p>
+                <input id="precioServicio" value="{{servicio.precio}}" type="number" hidden>
+
+                <button id="btnAddServicio" class="btn btn-success mt-1" >añadir producto al carrito</button>
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}
+
+<script src="{% static 'js/agregarCarrito.js' %}"></script>
+
+{% endblock %}

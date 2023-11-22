@@ -10,7 +10,7 @@ import json
 
 
 def index(request):
-    vServicios = Producto.objects.all
+    vServicios = Servicio.objects.all
     template = loader.get_template("taller/index.html")
     context = {
         "servicios": vServicios
@@ -18,8 +18,8 @@ def index(request):
     
     return HttpResponse(template.render(context, request))
 
-def ventaServicios(request, serv_id):
-    template = loader.get_template("taller/ventaProducto.html")
+def VerServicio(request, serv_id):
+    template = loader.get_template("taller/verServicio.html")
     try:
         vServicio = Servicio.objects.get(pk=serv_id)
         context = { "servicio": vServicio}
@@ -131,12 +131,14 @@ def agregarServicio(request):
     v_nombre = request.POST['txtnombre']
     v_precio = request.POST['txtprecio']
     v_descripcion = request.POST['txtDescripcion']
+    v_imagen = request.FILES['txtImagen']
 
     Servicio.objects.create(
         nombre_servicio = v_nombre, 
         descripcion = v_descripcion, 
         encargado = v_empleado,
         precio = v_precio,        
+        imagenUrl = v_imagen
     )
     return redirect('/taller/crud/servicios')
 
