@@ -12,13 +12,6 @@ admin.site.register(Auto)
 admin.site.register(Reserva)
 admin.site.register(Detalle_reserva)
 admin.site.register(Categoria_producto)
-admin.site.register(Producto)   
-admin.site.register(Estado_civil)   
+admin.site.register(Producto)
+admin.site.register(Estado_civil)
 admin.site.register(Tipo_empleado)
-
-
-
-
-
-
-

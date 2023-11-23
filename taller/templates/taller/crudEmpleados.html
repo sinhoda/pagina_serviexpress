@@ -38,6 +38,10 @@
                     <label for="txtCorreo">Correo electronico:</label>
                     <input name="txtCorreo" id="txtCorreo" type="text" class="form-control">
                 </div>
+                <div class="col-md-6">
+                    <label for="txtPassword">Contraseña:</label>
+                    <input name="txtPassword" id="txtPassword" type="text" class="form-control">
+                </div>
 
                 <div class="col-md-12">
                     <label for="txtDireccion">Direccion de vivienda:</label>
@@ -61,6 +65,16 @@
                         <option disabled selected>Seleccione</option>
                         {% for est in estadoCivil %}
                         <option value="{{est.pk}}">{{est.pk}} {{ est.estado_civil }}</option>
+                        {% endfor %}
+                      </select> 
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cmbTaller">Taller:</label>
+                    <select id="cmbTaller" name="cmbTaller" class="form-select" aria-label="Default select example">
+                        <option disabled selected>Seleccione</option>
+                        {% for t in taller %}
+                        <option value="{{t.pk}}">{{t.nombre}}</option>
                         {% endfor %}
                       </select> 
                 </div>
