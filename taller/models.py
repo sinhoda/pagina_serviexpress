@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import UserManager, AbstractBaseUser, PermissionsMixin
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -29,88 +30,69 @@ class Estado_civil(models.Model):
         txt = "id: {0} - estado civil: {1} "
         return txt.format(self.id_estado_civil, self.estado_civil)
 
-
-class User(AbstractUser):
-    class Role(models.TextChoices):
-        ADMIN = "ADMIN", "Admin"
-        CLIENTE = "CLIENTE", "Cliente"
-        EMPLEADO = "EMPLEADO", "Empleado"
-
-    base_role = Role.ADMIN
-
-    role = models.CharField(max_length=50, choices=Role.choices)
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.role = self.base_role
-            return super().save(*args, **kwargs)
+class Tipo_usuario(models.Model):
+    id_tipo_usuario = models.AutoField(primary_key=True)
+    tipo_usuario = models.CharField(max_length=200)
+    def __str__(self):
+        txt = "id: {0} - tipo usuario: {1} "
+        return txt.format(self.id_tipo_usuario, self.tipo_usuario)
 
 
-class ClienteManager(BaseUserManager):
-    def get_queryset(self, *args, **kwargs):
-        result = super().get_queryset(*args, **kwargs)
-        return result.filter(role=User.Role.CLIENTE)
+class CustomUserManager(UserManager):
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("Se necesita un correo")
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+    
+    def create_user(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False) 
+        extra_fields.setdefault('is_superuser', False) 
+        return self._create_user(email, password, **extra_fields)
+        
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True) 
+        extra_fields.setdefault('is_superuser', True) 
+        return self._create_user(email, password, **extra_fields)
 
 
-class Cliente(User):
-    base_role = User.Role.CLIENTE
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(blank=True, default='', unique=True)
+    nombre = models.CharField(max_length=200, blank=True)
+    rut = models.IntegerField(blank=True, null=True)
+    ap_paterno = models.CharField(max_length=200, blank=True)
+    ap_materno = models.CharField(max_length=200, blank=True)
+    direccion = models.CharField(max_length=200, blank=True)
+    numero_contacto = models.IntegerField(blank=True, null=True )
 
-    cliente = ClienteManager()
-
-    class Meta:
-        proxy = True
-
-    def welcome(self):
-        return "Only for Cliente"
-
-
-@receiver(post_save, sender=Cliente)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == "CLIENTE":
-        ClienteProfile.objects.create(user=instance)
-
-
-class ClienteProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    rut = models.IntegerField(null=True, blank=True)
-    apellido_materno = models.CharField(max_length=200)
-    numero_contacto = models.IntegerField()
-    direccion_vivienda = models.CharField(max_length=200)
-
-
-class EmpleadoManager(BaseUserManager):
-    def get_queryset(self, *args, **kwargs):
-        result = super().get_queryset(*args, **kwargs)
-        return result.filter(role=User.Role.EMPLEADO)
-
-
-class Empleado(User):
-    base_role = User.Role.EMPLEADO
-
-    empleado = EmpleadoManager()
-
-    class Meta:
-        proxy = True
-
-    def welcome(self):
-        return "Only for Empleado"
-
-
-@receiver(post_save, sender=Empleado)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == "EMPLEADO":
-        EmpleadoProfile.objects.create(user=instance)
-
-
-class EmpleadoProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    rut = models.IntegerField(primary_key=True)
+    is_empleado = models.BooleanField(default=False)
+    tipo_empleado = models.ForeignKey(Tipo_empleado, on_delete=models.CASCADE, null=True, blank=True)
+    estado_civil = models.ForeignKey(Estado_civil, on_delete=models.CASCADE, null=True)
     taller = models.ForeignKey(Taller, on_delete=models.CASCADE, null=True, blank=True)
-    apellido_materno = models.CharField(max_length=200)
-    numero_contacto = models.IntegerField(null=True, blank=True) 
-    direccion_vivienda = models.CharField(max_length=200)
-    estado_civil = models.ForeignKey(Estado_civil, on_delete=models.CASCADE, null=True, blank=True)
-    tipo_empleado = models.ForeignKey(Tipo_empleado, on_delete=models.CASCADE,  null=True, blank=True)
+
+
+
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'   
+    REQUIRED_FIELDS = []
+
+
+
+@receiver(post_save, sender=User)
+def user_empleado(sender, instance, created, **kwargs):
+    if created and instance.is_empleado:
+        pass
 
 
 # Create your models here.
@@ -121,7 +103,7 @@ class Auto(models.Model):
     marca = models.CharField(max_length=200)
     modelo = models.CharField(max_length=200)
     anio_auto = models.DateField()  # Cambiar a date
-    duenio = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    """ duenio = models.ForeignKey(Cliente, on_delete=models.CASCADE) """
 
     def __str__(self):
         txt = "Patente: {0} - Marca: {1} - Modelo: {2} - Año: {3}"
@@ -170,7 +152,7 @@ class Servicio(models.Model):
     id_servicio = models.AutoField(primary_key=True)
     nombre_servicio = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=200)
-    encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    """ encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE) """
     precio = models.IntegerField(default=1)
     imagenUrl = models.ImageField(upload_to="imagenesServicios")
 
@@ -185,7 +167,7 @@ class Reserva(models.Model):
     id_reserva = models.AutoField(primary_key=True)
     precio = models.IntegerField(default=0)
     fecha_solicitud = models.DateField(auto_now_add=True)
-    FK_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    """ FK_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE) """
     fecha_realizar = models.DateField()
 
 

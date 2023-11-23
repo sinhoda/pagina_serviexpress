@@ -30,7 +30,7 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/taller/carrito">Carrito</a>
               </li>
-              {% if user == 'empleado' %}
+              {% if user.is_empleado %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Administrador
@@ -39,6 +39,7 @@
                   <li><a class="dropdown-item" href="/taller/crud/productos">Lista de productos</a></li>
                   <li><a class="dropdown-item" href="/taller/crud/servicios">Lista de servicios</a></li>
                   <li><a class="dropdown-item" href="/taller/crud/empleados">Lista de empleados</a></li>
+                  <li><a class="dropdown-item" href="/taller/crud/proveedores">Lista de proveedores</a></li>
                   <!-- <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li> -->
                 </ul>

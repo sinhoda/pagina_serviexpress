@@ -68,17 +68,6 @@
                         {% endfor %}
                       </select> 
                 </div>
-
-                <div class="col-md-6">
-                    <label for="cmbTaller">Taller:</label>
-                    <select id="cmbTaller" name="cmbTaller" class="form-select" aria-label="Default select example">
-                        <option disabled selected>Seleccione</option>
-                        {% for t in taller %}
-                        <option value="{{t.pk}}">{{t.nombre}}</option>
-                        {% endfor %}
-                      </select> 
-                </div>
-
                 
 
 
@@ -104,17 +93,18 @@
         </thead>
         <tbody>
             {% for emp in empleados %}
+            
           <tr>
-            <th scope="row">{{emp.pk}}</th>
+            <th scope="row">{{emp.rut}}</th>
             <td>{{emp.nombre}}</td>
-            <td>{{emp.apellido_paterno}}</td>
-            <td>{{emp.apellido_materno}}</td>
-            <td>{{emp.correo_electronico}}</td>
+            <td>{{emp.ap_paterno}}</td>
+            <td>{{emp.ap_materno}}</td>
+            <td>{{emp.email}}</td>
             <td><a href="editarEmpleado/{{emp.rut}}" class="btn btn-primary">Editar</a></td>
             <td><a href="eliminarEmpleado/{{emp.rut}}" class="btn btn-danger">Eliminar</a></td>
           </tr>
             {% endfor %}
-        </tbody>
+        </tbody> 
       </table>
 </div>
 

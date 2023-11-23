@@ -7,7 +7,9 @@ from django.conf import settings
 from .models import *
 from django.http import JsonResponse
 import json
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 
 
 def index(request):
@@ -124,14 +126,14 @@ def editarProducto(request):
 
 def crudServicios(request):
     vServicios = Servicio.objects.all
-    vEmpleados = Empleado.objects.all
+    vEmpleados = User.objects.all().filter(is_empleado=True )
     template = loader.get_template("taller/crudServicios.html")
     context = {"servicios": vServicios, "empleados": vEmpleados}
     return HttpResponse(template.render(context, request))
 
 
 def agregarServicio(request):
-    v_empleado = Empleado.objects.get(pk=request.POST["cmbEncargado"])
+    v_empleado = User.objects.get(pk=request.POST["cmbEncargado"])
     v_nombre = request.POST["txtnombre"]
     v_precio = request.POST["txtprecio"]
     v_descripcion = request.POST["txtDescripcion"]
@@ -155,14 +157,14 @@ def eliminarServicio(request, serv_id):
 
 def cargarEditarServicio(request, serv_id):
     serv = Servicio.objects.get(pk=serv_id)
-    empleados = Empleado.objects.all()
+    empleados = User.objects.all()
     template = loader.get_template("taller/editarServicio.html")
     context = {"servicio": serv, "empleados": empleados}
     return HttpResponse(template.render(context, request))
 
 
 def editarServicio(request):
-    v_empleado = Empleado.objects.get(rut=request.POST["cmbEmpleado"])
+    v_empleado = User.objects.get(pk=request.POST["cmbEmpleado"])
 
     v_sku = request.POST["txtSku"]
     servicioBD = Servicio.objects.get(pk=v_sku)
@@ -184,10 +186,11 @@ def editarServicio(request):
 
 
 def crudEmpleados(request):
-    vEmpleados = Empleado.objects.all
+    vEmpleados = User.objects.all().filter(is_empleado=True)
     vTipo = Tipo_empleado.objects.all
     vEstado = Estado_civil.objects.all
     vTaller = Taller.objects.all
+
     template = loader.get_template("taller/crudEmpleados.html")
     context = {"empleados": vEmpleados, "tipo": vTipo, "estadoCivil": vEstado, "taller": vTaller}
     return HttpResponse(template.render(context, request))
@@ -206,32 +209,35 @@ def agregarEmpleado(request):
     vEstadoCivil = Estado_civil.objects.get(pk=request.POST["cmbCivil"])
 
 
-    Empleado.objects.create_user(
-    username = vRut, 
+
+    vEmpleado = User.objects.create_user( 
+    password = vPassword, 
     email = vCorreo, 
-    password = vPassword, )
-
-    Empleado.rut = vRut
-    Empleado.first_name = vNombre
-    Empleado.last_name = vApPaterno
-    Empleado.apellido_materno = vApMaterno
-    Empleado.numero_contacto = vNumero 
-    Empleado.direccion_vivienda = vDireccion
-    Empleado.estado_civil = vEstadoCivil
-    Empleado.tipo_empleado = vTipo
-
-    Empleado.save(self=Empleado)
+    nombre = vNombre,
+    rut = vRut,
+    ap_paterno = vApPaterno,
+    ap_materno = vApMaterno,
+    direccion = vDireccion,
+    numero_contacto = vNumero,
+    is_empleado = True
+    )
+    
+    if vEmpleado.is_empleado:
+        vEmpleado.tipo_empleado = vTipo
+        vEmpleado.Estado_civil = vEstadoCivil
+        vEmpleado.save()
+    
 
     return redirect("/taller/crud/empleados")
 
 
-def eliminarEmpleado(request, rut):
-    Empleado.objects.get(pk=rut).delete()
+def eliminarEmpleado(request, id):
+    User.objects.get(pk=id).delete()
     return redirect("/taller/crud/empleados")
 
 
-def cargarEditarEmpleado(request, rut):
-    vEmpleado = Empleado.objects.get(pk=rut)
+def cargarEditarEmpleado(request, id):
+    vEmpleado = User.objects.get(pk=id)
     vTipo = Tipo_empleado.objects.all()
     vCivil = Estado_civil.objects.all()
     template = loader.get_template("taller/editarEmpleado.html")
@@ -240,7 +246,7 @@ def cargarEditarEmpleado(request, rut):
 
 
 def editarEmpleado(request):
-    empleadoBD = Empleado.objects.get(rut=request.POST["txtRut"])
+    empleadoBD = User.objects.get(id=request.POST["txtRut"])
     vNombre = request.POST["txtNombre"]
     vApPaterno = request.POST["txtApPat"]
     vApMaterno = request.POST["txtApMat"]
@@ -334,16 +340,16 @@ def cargarInicioSesion(request):
 
 
 def iniciarSesion(request):
-    correo = request.POST["txtCorreo"]
-    password = request.POST["txtPassword"]
+    if request.method == "POST":
+        correo = request.POST["txtCorreo"]
+        password = request.POST["txtPassword"]
+        user = authenticate(request, email=correo, password=password)
 
-    try:
-        usuario = Cliente.objects.get(correo_electronico=correo, password=password)
-        login(request, usuario)
-        print(usuario)
-    except:
-        usuario = Empleado.objects.get(correo_electronico=correo, password=password)
-        login(request, usuario)
-        print(usuario)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Inicio de sesión exitoso.')
+            return redirect('/taller')
 
-    return redirect("/taller")
+
+    return redirect('/taller')
+
