@@ -72,7 +72,7 @@
 
 
             </div>
-            <button class="btn btn-success mt-5 w-100">Agregar servicio</button>
+            <button class="btn btn-success mt-5 w-100">Agregar empleado</button>
         </form>
     </div>
 
@@ -100,8 +100,8 @@
             <td>{{emp.ap_paterno}}</td>
             <td>{{emp.ap_materno}}</td>
             <td>{{emp.email}}</td>
-            <td><a href="editarEmpleado/{{emp.rut}}" class="btn btn-primary">Editar</a></td>
-            <td><a href="eliminarEmpleado/{{emp.rut}}" class="btn btn-danger">Eliminar</a></td>
+            <td><a href="editarEmpleado/{{emp.id}}" class="btn btn-primary">Editar</a></td>
+            <td><a href="eliminarEmpleado/{{emp.id}}" class="btn btn-danger">Eliminar</a></td>
           </tr>
             {% endfor %}
         </tbody> 

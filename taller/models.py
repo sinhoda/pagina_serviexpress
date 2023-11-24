@@ -72,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_empleado = models.BooleanField(default=False)
     tipo_empleado = models.ForeignKey(Tipo_empleado, on_delete=models.CASCADE, null=True, blank=True)
-    estado_civil = models.ForeignKey(Estado_civil, on_delete=models.CASCADE, null=True)
+    estado_civil = models.ForeignKey(Estado_civil, on_delete=models.CASCADE, null=True, blank=True)
     taller = models.ForeignKey(Taller, on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -103,7 +103,7 @@ class Auto(models.Model):
     marca = models.CharField(max_length=200)
     modelo = models.CharField(max_length=200)
     anio_auto = models.DateField()  # Cambiar a date
-    """ duenio = models.ForeignKey(Cliente, on_delete=models.CASCADE) """
+    duenio = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         txt = "Patente: {0} - Marca: {1} - Modelo: {2} - Año: {3}"
@@ -122,6 +122,9 @@ class Proveedor(models.Model):
     telefono = models.IntegerField()
     correo_electronico = models.CharField(max_length=200)
     informacion_extra = models.CharField(max_length=200, null=True, blank=True)
+    def __str__(self):
+        txt = "id: {0} - nombre: {1} - rubro: {2}"
+        return txt.format(self.pk, self.nombre_proveedor, self.rubro.nombre_rubro)
 
 
 class Categoria_producto(models.Model):
@@ -152,7 +155,7 @@ class Servicio(models.Model):
     id_servicio = models.AutoField(primary_key=True)
     nombre_servicio = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=200)
-    """ encargado = models.ForeignKey(Empleado, on_delete=models.CASCADE) """
+    encargado = models.ForeignKey(User, on_delete=models.CASCADE) 
     precio = models.IntegerField(default=1)
     imagenUrl = models.ImageField(upload_to="imagenesServicios")
 
@@ -165,9 +168,9 @@ class Servicio(models.Model):
 
 class Reserva(models.Model):
     id_reserva = models.AutoField(primary_key=True)
-    precio = models.IntegerField(default=0)
+    precio = models.IntegerField(default=0, blank=True, null=True)
     fecha_solicitud = models.DateField(auto_now_add=True)
-    """ FK_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE) """
+    FK_cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha_realizar = models.DateField()
 
 

@@ -25,11 +25,21 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Solicitar servicio  </a>
+                <a class="nav-link active" aria-current="page" href="/taller/servicios">Lista de servicios</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="/taller/carrito">Carrito</a>
               </li>
+              
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link active" href="/taller/cerrar_sesion">Cerrar Sesion</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link active" href="/taller/iniciar_sesion">Iniciar Sesion</a>
+              </li>
+              {% endif %}
               {% if user.is_empleado %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,14 +55,9 @@
                 </ul>
               </li>
               {% endif %}
-              <li class="nav-item">
-                <a class="nav-link active" href="/taller/iniciar_sesion">Iniciar Sesion</a>
-              </li>
+              
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            
           </div>
         </div>
       </nav>

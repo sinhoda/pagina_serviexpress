@@ -4,9 +4,10 @@
 
 {% block body %}
 
-    <h1>Editar producto</h1>
+ 
 
-    <div class="container">
+    <div class="container text-center">
+        <h1>Editar servicio</h1>
         <form action="/taller/crud/editarServicio" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
@@ -28,7 +29,7 @@
                     <select id="cmbEmpleado" name="cmbEmpleado" class="form-select" aria-label="Default select example">
                         <option disabled selected>Seleccione</option>
                         {% for emp in empleados %}
-                        <option value="{{emp.rut}}"  {% if emp.rut == servicio.encargado.rut %} selected {% endif %}>{{emp.rut}} - {{emp.nombre}}</option>
+                        <option value="{{emp.pk}}"  {% if emp.rut == servicio.encargado.rut %} selected {% endif %}>{{emp.rut}} - {{emp.nombre}}</option>
                         {% endfor %}
                       </select> 
                 </div>
@@ -38,6 +39,12 @@
                     <input value="{{servicio.descripcion}}" name="txtDescripcion" id="txtDescripcion" type="text" class="form-control">
                 </div>
 
+                <div class="col-md-12">
+                    <label for="txtImagen">Imagen:</label>
+                    <img src="{{producto.imagenUrl.url}}" height="100" alt="">
+
+                    <input name="txtImagen" id="txtImagen" type="file" class="form-control" value="null">
+                </div>
             </div>
             <button class="btn btn-success mt-5 w-100">Editar producto</button>
         </form>

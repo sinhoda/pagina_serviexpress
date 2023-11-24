@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="txtRut">Rut:</label>
-                    <input readonly value="{{empleado.pk}}" name="txtRut" id="txtRut" type="text" class="form-control" >
+                    <input readonly value="{{empleado.rut}}" name="txtRut" id="txtRut" type="text" class="form-control" >
                 </div>
 
                 <div class="col-md-8">
@@ -24,12 +24,12 @@
 
                 <div class="col-md-6">
                     <label for="txtApPat">Apellido paterno:</label>
-                    <input name="txtApPat" id="txtApPat" type="text" class="form-control"  value="{{empleado.apellido_paterno}}">
+                    <input name="txtApPat" id="txtApPat" type="text" class="form-control"  value="{{empleado.ap_paterno}}">
                 </div>
 
                 <div class="col-md-6">
                     <label for="txtApMat">Apellido materno:</label>
-                    <input name="txtApMat" id="txtApMat" type="text" class="form-control" value="{{empleado.apellido_materno}}">
+                    <input name="txtApMat" id="txtApMat" type="text" class="form-control" value="{{empleado.ap_materno}}">
                 </div>
 
                 <div class="col-md-6">
@@ -39,12 +39,12 @@
 
                 <div class="col-md-6">
                     <label for="txtCorreo">Correo electronico:</label>
-                    <input name="txtCorreo" id="txtCorreo" type="text" class="form-control" value="{{empleado.correo_electronico}}">
+                    <input name="txtCorreo" id="txtCorreo" type="text" class="form-control" value="{{empleado.email}}">
                 </div>
 
                 <div class="col-md-12">
                     <label for="txtDireccion">Direccion de vivienda:</label>
-                    <input name="txtDireccion" id="txtDireccion" type="text" class="form-control"  value="{{empleado.direccion_vivienda}}">
+                    <input name="txtDireccion" id="txtDireccion" type="text" class="form-control"  value="{{empleado.direccion}}">
                 </div>
 
 
@@ -70,7 +70,7 @@
 
 
             </div>
-            <button class="btn btn-success mt-5 w-100">Editar producto</button>
+            <button class="btn btn-success mt-5 w-100">Editar empleado</button>
         </form>
     </div>
 

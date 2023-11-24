@@ -5,9 +5,10 @@
 {% block body%}
 
 <!--Agregar un producto-->
-    <h1>Agregar producto</h1>
+    
 
-    <div class="container">
+    <div class="container text-center">
+      <h1>Agregar servicio</h1>
         <form id="formAgregar" action="agregarServicioForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
 
@@ -26,7 +27,7 @@
                     <select id="cmbEncargado" name="cmbEncargado" class="form-select" aria-label="Default select example">
                         <option disabled selected>Seleccione</option>
                         {% for emp in empleados %}
-                        <option value="{{emp.rut}}">{{emp.rut}} - {{emp.nombre}}</option>
+                        <option value="{{emp.id}}">{{emp.rut}} - {{emp.nombre}}</option>
                         {% endfor %}
                       </select> 
                 </div>

@@ -9,5 +9,6 @@ label{
     font-size: 25px;
 }
 #ventaDiv{
-    border: 10px solid black    ;
+    border: 3px solid black;
+    background-color: rgb(114, 114, 114);
 }

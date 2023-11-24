@@ -38,12 +38,12 @@ urlpatterns = [
     path("crud/empleados", views.crudEmpleados, name="crudEmpleados"),
     path("crud/agregarEmpleadoForm", views.agregarEmpleado),
     path(
-        "crud/eliminarEmpleado/<int:rut>",
+        "crud/eliminarEmpleado/<int:id>",
         views.eliminarEmpleado,
         name="eliminarEmpleado",
     ),
     path(
-        "crud/editarEmpleado/<int:rut>",
+        "crud/editarEmpleado/<int:id>",
         views.cargarEditarEmpleado,
         name="editarEmpleado",
     ),
@@ -63,4 +63,10 @@ urlpatterns = [
     # Inicio de sesion
     path("iniciar_sesion", views.cargarInicioSesion, name="CargarInicioSesion"),
     path("iniciar_sesion/iniciarSesionForm", views.iniciarSesion),
+    path("cerrar_sesion", views.cerrarSesion),
+    path("iniciar_sesion/registro_cliente", views.registroCliente, name="RegistroCliente"),
+    path("iniciar_sesion/registro_cliente/registroClienteForm", views.registroCliente, name="RegistroCliente"),
+    #Lista de servicios
+    path("servicios", views.ListaServicio, name="VerServicios"),
+    path("carrito/servicio_confirmado", views.servicioFinalizado),
 ]

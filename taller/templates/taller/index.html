@@ -11,50 +11,34 @@
 
 {% block body%}
 
-{{ user.ap_materno}}
-
-
+  
 <div id="myCarousel" class="carousel slide carousel-fade" data-bs-target="carousel" data-bs-ride="carousel">
   <ol class="carousel-indicators">
     <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
     <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
-    <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active" data-bs-interval="10000">
       <div class="overlay-image" id="overlay-image-flores"></div>
       <div class="container">
-        <h1>Productos</h1>
+        <h1>Servicios</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ad fugiat, consequuntur sequi voluptas
           ipsum perferendis laudantium officiis tempora optio nam. Beatae voluptatum assumenda facere, quibusdam
           cupiditate dignissimos possimus! Possimus?</p>
-        <a href="#" class="btn btn-lg btn-primary">
-          Compra ya
+        <a href="/taller/servicios" class="btn btn-lg btn-primary">
+          Ver lista de servicios
         </a>
       </div>
     </div>
     <div class="carousel-item" data-bs-interval="10000">
       <div class="overlay-image" id="overlay-image-macetero"></div>
       <div class="container">
-        <h1>Maceteros</h1>
+        <h1>Quienes somos</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ad fugiat, consequuntur sequi voluptas
           ipsum perferendis laudantium officiis tempora optio nam. Beatae voluptatum assumenda facere, quibusdam
           cupiditate dignissimos possimus! Possimus?</p>
         <a href="#" class="btn btn-lg btn-primary">
-          Compra ya
-        </a>
-      </div>
-    </div>
-    <div class="carousel-item" data-bs-interval="10000">
-      <div class="overlay-image" id="overlay-image-herramienta">
-      </div>
-      <div class="container">
-        <h1>Servicios</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ad fugiat, consequuntur sequi voluptas
-          ipsum perferendis laudantium officiis tempora optio nam. Beatae voluptatum assumenda facere, quibusdam
-          cupiditate dignissimos possimus! Possimus?</p>
-        <a href="#" class="btn btn-lg btn-primary">
-          solicita ahora
+          Ir
         </a>
       </div>
     </div>
@@ -76,9 +60,9 @@
 
 <div class="container mt-5 text-center" >
     <h1>Servicios destacados</h1>
-    <div class="row">        
+    <div class="row row-cols-3">        
         {% for s in servicios %}
-        <div class="col">
+        <div class="col mt-2">
             <div class="card" style="width: 18rem;">
                 <img src="{{s.imagenUrl.url}}" class="card-img-top" alt="..." height="150px" width="100px">
                 <div class="card-body">

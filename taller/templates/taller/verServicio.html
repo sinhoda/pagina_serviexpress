@@ -42,8 +42,24 @@
         </div>
     </div>    
 </div>
-
-
+<br>
+<div class="container text-center">
+    <h2>Otros servicios</h2>
+    <div class="row">
+    {% for s in aleatorios%}
+    <div class="col mt-2">
+            <div class="card" style="width: 18rem;">
+                <img src="{{s.imagenUrl.url}}" class="card-img-top" alt="..." height="100px" width="100px">
+                <div class="card-body">
+                    <h5 class="card-title">{{s.nombre_servicio}}</h5>
+                    <p class="card-text">${{s.precio}}</p>
+                    <a href="/taller/servicio/{{s.id_servicio}}" class="btn btn-primary">Ver servicio</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
 
 {% endblock %}
 

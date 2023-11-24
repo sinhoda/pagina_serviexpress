@@ -10,10 +10,11 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from datetime import datetime, timedelta
 
 
 def index(request):
-    vServicios = Servicio.objects.all
+    vServicios = Servicio.objects.all()[:6]
     template = loader.get_template("taller/index.html")
     context = {"servicios": vServicios}
 
@@ -22,9 +23,11 @@ def index(request):
 
 def VerServicio(request, serv_id):
     template = loader.get_template("taller/verServicio.html")
+    
     try:
         vServicio = Servicio.objects.get(pk=serv_id)
-        context = {"servicio": vServicio}
+        objetos_aleatorios = Servicio.objects.order_by('?')[:3]
+        context = {"servicio": vServicio, "aleatorios": objetos_aleatorios}
     except Producto.DoesNotExist:
         raise Http404("Producto no existe")
     return HttpResponse(template.render(context, request))
@@ -37,7 +40,8 @@ def crudProductos(request):
     vProductos = Producto.objects.all
     vCategorias = Categoria_producto.objects.all
     template = loader.get_template("taller/crudProductos.html")
-    context = {"productos": vProductos, "categorias": vCategorias}
+    vProveedores = Proveedor.objects.all()
+    context = {"productos": vProductos, "categorias": vCategorias, "proveedores": vProveedores}
     return HttpResponse(template.render(context, request))
 
 
@@ -62,6 +66,9 @@ def agregarProducto(request):
     v_categoria = Categoria_producto.objects.get(
         id_categoria=request.POST["cmbCategoria"]
     )
+    v_proveedor = Proveedor.objects.get(
+        id_proveedor=request.POST["cmbProveedor"]
+    )
 
     v_nombre = request.POST["txtnombre"]
     v_precio = request.POST["txtprecio"]
@@ -76,6 +83,7 @@ def agregarProducto(request):
         descripcion=v_descripcion,
         imagenUrl=v_imagen,
         categoria=v_categoria,
+        proveedor = v_proveedor
     )
 
     return redirect("/taller/crud/productos")
@@ -85,14 +93,18 @@ def agregarProducto(request):
 def cargarEditarProducto(request, prod_id):
     prod = Producto.objects.get(pk=prod_id)
     categorias = Categoria_producto.objects.all()
+    proveedores = Proveedor.objects.all()
     template = loader.get_template("taller/editarProducto.html")
-    context = {"producto": prod, "categorias": categorias}
+    context = {"producto": prod, "categorias": categorias, "proveedores": proveedores}
     return HttpResponse(template.render(context, request))
 
 
 def editarProducto(request):
     v_categoria = Categoria_producto.objects.get(
         id_categoria=request.POST["cmbCategoria"]
+    )
+    v_proveedor = Proveedor.objects.get(
+        id_proveedor=request.POST["cmbProveedor"]
     )
 
     v_sku = request.POST["txtSku"]
@@ -114,7 +126,8 @@ def editarProducto(request):
     productoBD.precio = v_precio
     productoBD.stock = v_stock
     productoBD.descripcion = v_descripcion
-    productoBD.categoriaId = v_categoria
+    productoBD.categoria = v_categoria
+    productoBD.proveedor = v_proveedor
 
     productoBD.save()
 
@@ -151,13 +164,15 @@ def agregarServicio(request):
 
 def eliminarServicio(request, serv_id):
     servicio = Servicio.objects.get(pk=serv_id)
+    ruta_imagen = os.path.join(settings.MEDIA_ROOT, str(servicio.imagenUrl))
+    os.remove(ruta_imagen)
     servicio.delete()
     return redirect("/taller/crud/servicios")
 
 
 def cargarEditarServicio(request, serv_id):
     serv = Servicio.objects.get(pk=serv_id)
-    empleados = User.objects.all()
+    empleados = User.objects.all().filter(is_empleado=True)
     template = loader.get_template("taller/editarServicio.html")
     context = {"servicio": serv, "empleados": empleados}
     return HttpResponse(template.render(context, request))
@@ -171,6 +186,14 @@ def editarServicio(request):
     v_nombre = request.POST["txtnombre"]
     v_precio = request.POST["txtprecio"]
     v_descripcion = request.POST["txtDescripcion"]
+    
+    try:
+        v_imagen = request.FILES["txtImagen"]
+        ruta_imagen = os.path.join(settings.MEDIA_ROOT, str(servicioBD.imagenUrl))
+        os.remove(ruta_imagen)
+        servicioBD.imagenUrl = v_imagen
+    except:
+        servicioBD.imagenUrl = servicioBD.imagenUrl
 
     servicioBD.nombre = v_nombre
     servicioBD.precio = v_precio
@@ -246,7 +269,7 @@ def cargarEditarEmpleado(request, id):
 
 
 def editarEmpleado(request):
-    empleadoBD = User.objects.get(id=request.POST["txtRut"])
+    empleadoBD = User.objects.get(rut=request.POST["txtRut"])
     vNombre = request.POST["txtNombre"]
     vApPaterno = request.POST["txtApPat"]
     vApMaterno = request.POST["txtApMat"]
@@ -281,10 +304,30 @@ def confirmarServicio(request):
     if request.method == "POST":
         data = request.POST.get("mi_dato")
         jdata = json.loads(data)
+        
+        username = None
+        if request.user.is_authenticated:
+            username = request.user
 
-        print(jdata)
+        fecha = datetime.now() + timedelta(5)
+        print(fecha)
 
-        return JsonResponse({"mensaje": "Datos recibidos correctamente."})
+        vReserva = Reserva.objects.create(
+            FK_cliente = username,
+            fecha_realizar = fecha
+        )
+
+
+        for j in jdata:
+            vServicio = Servicio.objects.get(pk=j['id'])
+            Detalle_reserva.objects.create(
+                id_reserva = vReserva,
+                FK_servicio = vServicio
+            )
+        
+        
+
+        return redirect('carrito/servicio_confirmado')
     else:
         return JsonResponse({"error": "Método no permitido"}, status=405)
 
@@ -342,14 +385,75 @@ def cargarInicioSesion(request):
 def iniciarSesion(request):
     if request.method == "POST":
         correo = request.POST["txtCorreo"]
-        password = request.POST["txtPassword"]
-        user = authenticate(request, email=correo, password=password)
-
+        vPassword = request.POST["txtPassword"]
+        user = authenticate(email=correo, password=vPassword)
         if user is not None:
             login(request, user)
             messages.success(request, 'Inicio de sesión exitoso.')
+            print("Exito")
             return redirect('/taller')
 
 
     return redirect('/taller')
 
+
+def cerrarSesion(request):
+    logout(request)
+    return redirect('/taller')
+
+def registroCliente(request):
+    if request.method == "POST":
+        vRut = request.POST["txtRut"]
+        vNombre = request.POST["txtnombre"]
+        vApPaterno = request.POST["txtApPat"]
+        vApMaterno = request.POST["txtApMat"]
+        vNumero = request.POST["txtNumero"]
+        vCorreo = request.POST["txtCorreo"]
+        vDireccion = request.POST["txtDireccion"]
+        vPassword = request.POST["txtPassword"]
+
+
+
+
+        cliente = User.objects.create_user( 
+        password = vPassword, 
+        email = vCorreo, 
+        nombre = vNombre,
+        rut = vRut,
+        ap_paterno = vApPaterno,
+        ap_materno = vApMaterno,
+        direccion = vDireccion,
+        numero_contacto = vNumero,
+        is_empleado = False
+        )
+
+        
+        return redirect('/taller/iniciar_sesion')
+    else:
+        template = loader.get_template("taller/registroCliente.html")
+        context = {}
+        return HttpResponse(template.render(context, request))
+    
+
+def ListaServicio(request):
+    template = loader.get_template("taller/listaServicios.html")
+    vServicios = Servicio.objects.all()
+    context = {"servicios": vServicios}
+    return HttpResponse(template.render(context, request))
+
+
+#Confirmo de servicio
+def servicioFinalizado(request):
+    template = loader.get_template("taller/confirmoServicio.html")
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+    
+    vReserva = Reserva.objects.filter(FK_cliente=username).first()
+    vDetalleReserva= Detalle_reserva.objects.all().filter(id_reserva=vReserva)
+
+    print(vReserva)
+    print(vDetalleReserva)
+    context = {"reserva": vReserva, "detalle": vDetalleReserva  }
+    return HttpResponse(template.render(context, request))
+    
